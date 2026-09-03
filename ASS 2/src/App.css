@@ -1,0 +1,514 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+.app-container {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 40px;
+  padding: 30px 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  animation: slideDown 0.5s ease;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.subtitle {
+  font-size: 18px;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.clock-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.6s ease;
+}
+
+.clock-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+.clock-card .card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 20px;
+  border-radius: 15px 15px 0 0;
+}
+
+.clock-card .card-header h5 {
+  margin: 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clock-card .card-body {
+  padding: 30px;
+  min-height: 300px;
+}
+
+/* Analog Clock Styles */
+.analog-clock-container {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 8px solid #667eea;
+  position: relative;
+  background: white;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+.clock-center {
+  width: 15px;
+  height: 15px;
+  background: #667eea;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.clock-hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  background: #333;
+  border-radius: 10px;
+}
+
+.hour-hand {
+  width: 6px;
+  height: 80px;
+  margin-left: -3px;
+  background: #667eea;
+}
+
+.minute-hand {
+  width: 4px;
+  height: 110px;
+  margin-left: -2px;
+  background: #764ba2;
+}
+
+.second-hand {
+  width: 2px;
+  height: 120px;
+  margin-left: -1px;
+  background: #ff6b6b;
+}
+
+.clock-number-item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  z-index: 1;
+}
+
+/* Digital Clock Styles */
+.digital-clock {
+  font-size: 72px;
+  font-weight: 700;
+  color: #667eea;
+  text-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 5px;
+  animation: pulse 1s infinite;
+}
+
+.digital-seconds {
+  font-size: 48px;
+  color: #764ba2;
+  margin-left: 10px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Timezone Cards */
+.timezone-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  animation: fadeIn 0.6s ease;
+}
+
+.timezone-card:hover {
+  transform: translateX(5px);
+}
+
+.timezone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.timezone-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timezone-time {
+  font-size: 28px;
+  font-weight: 700;
+  color: #667eea;
+  font-family: 'Courier New', monospace;
+}
+
+.timezone-offset {
+  font-size: 14px;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Alarm Manager Styles */
+.alarm-manager-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.6s ease;
+}
+
+.alarm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.alarm-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alarm-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.alarm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.alarm-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.alarm-item {
+  background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  animation: slideUp 0.5s ease;
+}
+
+.alarm-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.alarm-info {
+  flex-grow: 1;
+}
+
+.alarm-time {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  font-family: 'Courier New', monospace;
+}
+
+.alarm-label {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.alarm-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.alarm-toggle {
+  width: 50px;
+  height: 26px;
+  background: #ddd;
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.alarm-toggle.active {
+  background: #28a745;
+}
+
+.alarm-toggle::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s ease;
+}
+
+.alarm-toggle.active::after {
+  left: 26px;
+}
+
+.alarm-delete {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.alarm-delete:hover {
+  background: #ee5a52;
+}
+
+.alarm-empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.alarm-empty-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+/* Modal Styles */
+.modal-content {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  padding: 10px 15px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  padding: 10px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: white;
+  padding: 20px;
+  margin-top: 40px;
+  opacity: 0.8;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .digital-clock {
+    font-size: 48px;
+  }
+
+  .digital-seconds {
+    font-size: 32px;
+  }
+
+  .analog-clock-container {
+    width: 200px;
+    height: 200px;
+  }
+
+  .alarm-list {
+    grid-template-columns: 1fr;
+  }
+
+  .timezone-card {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .header {
+    margin-bottom: 20px;
+    padding: 20px 10px;
+  }
+
+  .title {
+    font-size: 24px;
+    gap: 10px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .clock-card .card-body {
+    padding: 15px;
+    min-height: auto;
+  }
+
+  .digital-clock {
+    font-size: 36px;
+  }
+
+  .analog-clock-container {
+    width: 150px;
+    height: 150px;
+  }
+}

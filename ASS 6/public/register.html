@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Online Book Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="nav-brand">📚 BookStore</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/books">Books</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a href="/login" class="btn btn-outline">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="form-container">
+      <h2>Create Account</h2>
+
+      <div id="alertContainer"></div>
+
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input 
+            type="text" 
+            id="firstName" 
+            name="firstName" 
+            required
+            placeholder="Enter first name"
+          >
+          <div class="form-error" id="firstNameError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input 
+            type="text" 
+            id="lastName" 
+            name="lastName" 
+            required
+            placeholder="Enter last name"
+          >
+          <div class="form-error" id="lastNameError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            placeholder="Enter your email"
+          >
+          <div class="form-error" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required
+            placeholder="Minimum 6 characters"
+          >
+          <div class="form-error" id="passwordError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number (Optional)</label>
+          <input 
+            type="tel" 
+            id="phoneNumber" 
+            name="phoneNumber" 
+            placeholder="Enter phone number"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address (Optional)</label>
+          <textarea 
+            id="address" 
+            name="address"
+            placeholder="Enter your address"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">
+          Register
+        </button>
+      </form>
+
+      <p style="text-align: center;">
+        Already have an account? <a href="/login">Login here</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Online Book Store. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    async function handleRegister(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const address = document.getElementById('address').value.trim();
+
+      // Clear errors
+      document.getElementById('firstNameError').textContent = '';
+      document.getElementById('lastNameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
+
+      // Validation
+      if (!firstName || firstName.length < 2) {
+        document.getElementById('firstNameError').textContent = 'First name must be at least 2 characters';
+        return;
+      }
+
+      if (!lastName || lastName.length < 2) {
+        document.getElementById('lastNameError').textContent = 'Last name must be at least 2 characters';
+        return;
+      }
+
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required';
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('emailError').textContent = 'Invalid email format';
+        return;
+      }
+
+      if (password.length < 6) {
+        document.getElementById('passwordError').textContent = 'Password must be at least 6 characters';
+        return;
+      }
+
+      try {
+        const result = await authAPI.register({
+          firstName,
+          lastName,
+          email,
+          password,
+          phoneNumber,
+          address
+        });
+
+        if (result.ok) {
+          showAlert('Registration successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1500);
+        } else {
+          showAlert(result.data.error || 'Registration failed', 'error');
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        showAlert('An error occurred. Please try again.', 'error');
+      }
+    }
+
+    function showAlert(message, type) {
+      const alertContainer = document.getElementById('alertContainer');
+      const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+      alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+    }
+  </script>
+</body>
+</html>

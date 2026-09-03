@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Online Book Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="nav-brand">📚 BookStore</a>
+      <ul class="nav-menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/profile">Profile</a></li>
+      </ul>
+      <div class="nav-auth">
+        <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>My Profile</h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+      <!-- Profile Form -->
+      <div>
+        <h2>Account Information</h2>
+        <div class="form-container">
+          <div id="profileAlertContainer"></div>
+
+          <form id="profileForm" onsubmit="handleProfileUpdate(event)">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" required>
+              <div class="form-error" id="firstNameError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" required>
+              <div class="form-error" id="lastNameError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" disabled>
+              <small style="color: #666;">Email cannot be changed</small>
+            </div>
+
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number</label>
+              <input type="tel" id="phoneNumber" name="phoneNumber">
+              <div class="form-error" id="phoneNumberError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <textarea id="address" name="address"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Update Profile
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Change Password Form -->
+      <div>
+        <h2>Change Password</h2>
+        <div class="form-container">
+          <div id="passwordAlertContainer"></div>
+
+          <form id="passwordForm" onsubmit="handlePasswordChange(event)">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" name="currentPassword" required>
+              <div class="form-error" id="currentPasswordError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input type="password" id="newPassword" name="newPassword" required>
+              <div class="form-error" id="newPasswordError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" required>
+              <div class="form-error" id="confirmPasswordError"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Change Password
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Online Book Store. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/validation.js"></script>
+  <script>
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!isAuthenticated()) {
+        window.location.href = '/login';
+        return;
+      }
+      loadProfile();
+    });
+
+    // Load profile
+    async function loadProfile() {
+      try {
+        const result = await usersAPI.getProfile();
+        if (result.ok) {
+          document.getElementById('firstName').value = result.data.firstName;
+          document.getElementById('lastName').value = result.data.lastName;
+          document.getElementById('email').value = result.data.email;
+          document.getElementById('phoneNumber').value = result.data.phoneNumber || '';
+          document.getElementById('address').value = result.data.address || '';
+        } else {
+          validation.showAlert('Failed to load profile', 'error');
+          if (result.data.error && result.data.error.includes('token')) {
+            authAPI.logout();
+            window.location.href = '/login';
+          }
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        validation.showAlert('Error loading profile', 'error');
+      }
+    }
+
+    // Handle profile update
+    async function handleProfileUpdate(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const address = document.getElementById('address').value.trim();
+
+      const errors = {};
+      if (!validation.isValidName(firstName)) {
+        errors.firstName = 'First name must be at least 2 characters';
+      }
+      if (!validation.isValidName(lastName)) {
+        errors.lastName = 'Last name must be at least 2 characters';
+      }
+      if (phoneNumber && !validation.isValidPhone(phoneNumber)) {
+        errors.phoneNumber = 'Invalid phone number';
+      }
+
+      if (!validation.displayErrors(errors)) {
+        return;
+      }
+
+      try {
+        const result = await usersAPI.updateProfile({
+          firstName,
+          lastName,
+          phoneNumber,
+          address
+        });
+
+        if (result.ok) {
+          validation.showAlert('Profile updated successfully!', 'success');
+          const alertContainer = document.getElementById('profileAlertContainer');
+          alertContainer.innerHTML = '<div class="alert alert-success">Profile updated successfully!</div>';
+        } else {
+          validation.showAlert(result.data.error || 'Failed to update profile', 'error');
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        validation.showAlert('An error occurred', 'error');
+      }
+    }
+
+    // Handle password change
+    async function handlePasswordChange(event) {
+      event.preventDefault();
+
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      const errors = {};
+      if (!currentPassword) {
+        errors.currentPassword = 'Current password is required';
+      }
+      if (!validation.isValidPassword(newPassword)) {
+        errors.newPassword = 'New password must be at least 6 characters';
+      }
+      if (newPassword !== confirmPassword) {
+        errors.confirmPassword = 'Passwords do not match';
+      }
+
+      if (!validation.displayErrors(errors)) {
+        return;
+      }
+
+      try {
+        const result = await usersAPI.changePassword({
+          currentPassword,
+          newPassword,
+          confirmPassword
+        });
+
+        if (result.ok) {
+          validation.showAlert('Password changed successfully!', 'success');
+          document.getElementById('passwordForm').reset();
+          const alertContainer = document.getElementById('passwordAlertContainer');
+          alertContainer.innerHTML = '<div class="alert alert-success">Password changed successfully!</div>';
+          setTimeout(() => {
+            alertContainer.innerHTML = '';
+          }, 3000);
+        } else {
+          validation.showAlert(result.data.error || 'Failed to change password', 'error');
+        }
+      } catch (error) {
+        console.error('Error changing password:', error);
+        validation.showAlert('An error occurred', 'error');
+      }
+    }
+
+    // Logout
+    function handleLogout() {
+      if (confirm('Are you sure you want to logout?')) {
+        authAPI.logout();
+        window.location.href = '/';
+      }
+    }
+  </script>
+</body>
+</html>

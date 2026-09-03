@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Books - Online Book Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="nav-brand">📚 BookStore</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/books">Books</a></li>
+        <li class="authenticated hidden" id="navProfile">
+          <a href="/profile">Profile</a>
+        </li>
+      </ul>
+      <div class="nav-auth" id="navAuth">
+        <a href="/login" class="btn btn-outline">Login</a>
+        <a href="/register" class="btn btn-outline">Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Browse Our Collection</h1>
+
+    <!-- Search and Filter Section -->
+    <div class="search-section">
+      <div class="search-form">
+        <input type="text" id="searchInput" placeholder="Search by title or author...">
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+          <option value="Fiction">Fiction</option>
+          <option value="Non-Fiction">Non-Fiction</option>
+          <option value="Science">Science</option>
+          <option value="History">History</option>
+          <option value="Self-Help">Self-Help</option>
+          <option value="Technology">Technology</option>
+          <option value="General">General</option>
+        </select>
+        <button class="btn btn-primary" onclick="searchBooks()">Search</button>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="books-grid" id="booksGrid">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Online Book Store. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/books.js"></script>
+</body>
+</html>

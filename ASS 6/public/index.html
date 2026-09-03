@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Book Store - Home</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="nav-brand">📚 BookStore</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/books">Books</a></li>
+        <li class="authenticated hidden" id="navProfile">
+          <a href="/profile">Profile</a>
+        </li>
+      </ul>
+      <div class="nav-auth" id="navAuth">
+        <a href="/login" class="btn btn-outline">Login</a>
+        <a href="/register" class="btn btn-outline">Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Welcome to Our Online Book Store</h1>
+    <p>Discover thousands of books from your favorite authors</p>
+    <a href="/books" class="btn btn-secondary">Browse Books</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2>Featured Books</h2>
+    <div class="books-grid" id="featuredBooks">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Online Book Store. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
