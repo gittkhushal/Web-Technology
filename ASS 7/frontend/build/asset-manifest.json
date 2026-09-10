@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7e1831d5.css",
+    "main.js": "/static/js/main.0348d021.js",
+    "static/media/reading-room-hero.png": "/static/media/reading-room-hero.96cdd0907cf5fdb31e6e.png",
+    "index.html": "/index.html",
+    "main.7e1831d5.css.map": "/static/css/main.7e1831d5.css.map",
+    "main.0348d021.js.map": "/static/js/main.0348d021.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7e1831d5.css",
+    "static/js/main.0348d021.js"
+  ]
+}

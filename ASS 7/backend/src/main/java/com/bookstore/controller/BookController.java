@@ -1,86 +1,53 @@
 package com.bookstore.controller;
 
-import com.bookstore.dto.BookResponse;
+import com.bookstore.dto.BookDTO;
 import com.bookstore.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/books")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/api/books")
+@RequiredArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
+    // Public - anyone can browse books
     @GetMapping
-    public ResponseEntity<Page<BookResponse>> getAllBooks(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "title") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-
-        Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        
-        Page<BookResponse> books = bookService.getAllBooks(pageable);
-        return ResponseEntity.ok(books);
+    public ResponseEntity<List<BookDTO>> getAllBooks(@RequestParam(required = false) String keyword) {
+        if (keyword != null && !keyword.isBlank()) {
+            return ResponseEntity.ok(bookService.search(keyword));
+        }
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
+    // Public - book detail page
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable String id) {
-        return bookService.getBookById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BookDTO> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
-    @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<?> getBookByIsbn(@PathVariable String isbn) {
-        return bookService.getBookByIsbn(isbn)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Admin only (see SecurityConfig)
+    @PostMapping
+    public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(dto));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<BookResponse>> searchBooks(
-            @RequestParam String keyword,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "title") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-
-        Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        
-        Page<BookResponse> books = bookService.searchBooks(keyword, pageable);
-        return ResponseEntity.ok(books);
+    // Admin only
+    @PutMapping("/{id}")
+    public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @Valid @RequestBody BookDTO dto) {
+        return ResponseEntity.ok(bookService.updateBook(id, dto));
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<Page<BookResponse>> getBooksByCategory(
-            @PathVariable String category,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "title") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-
-        Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        
-        Page<BookResponse> books = bookService.getBooksByCategory(category, pageable);
-        return ResponseEntity.ok(books);
-    }
-
-    @GetMapping("/featured")
-    public ResponseEntity<List<BookResponse>> getFeaturedBooks() {
-        List<BookResponse> books = bookService.getFeaturedBooks();
-        return ResponseEntity.ok(books);
+    // Admin only
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 }

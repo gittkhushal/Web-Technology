@@ -1,59 +1,92 @@
 package com.bookstore.service;
 
-import com.bookstore.dto.BookResponse;
-import com.bookstore.model.Book;
+import com.bookstore.dto.BookDTO;
+import com.bookstore.entity.Book;
+import com.bookstore.exception.ResourceNotFoundException;
 import com.bookstore.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-    public Page<BookResponse> getAllBooks(Pageable pageable) {
-        Page<Book> books = bookRepository.findByIsActive(true, pageable);
-        return books.map(BookResponse::fromEntity);
-    }
-
-    public Optional<BookResponse> getBookById(String id) {
-        return bookRepository.findById(id)
-                .filter(b -> b.isAvailable())
-                .map(BookResponse::fromEntity);
-    }
-
-    public Optional<BookResponse> getBookByIsbn(String isbn) {
-        return bookRepository.findByIsbn(isbn)
-                .filter(b -> b.isAvailable())
-                .map(BookResponse::fromEntity);
-    }
-
-    public Page<BookResponse> searchBooks(String keyword, Pageable pageable) {
-        Page<Book> books = bookRepository.searchBooks(keyword, pageable);
-        return books.map(BookResponse::fromEntity);
-    }
-
-    public Page<BookResponse> getAvailableBooks(Pageable pageable) {
-        Page<Book> books = bookRepository.findAvailableBooks(pageable);
-        return books.map(BookResponse::fromEntity);
-    }
-
-    public Page<BookResponse> getBooksByCategory(String category, Pageable pageable) {
-        Page<Book> books = bookRepository.findByCategoryAndIsActive(category, true, pageable);
-        return books.map(BookResponse::fromEntity);
-    }
-
-    public List<BookResponse> getFeaturedBooks() {
-        List<Book> books = bookRepository.findFeaturedBooks();
-        return books.stream()
-                .map(BookResponse::fromEntity)
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public BookDTO getBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+        return toDTO(book);
+    }
+
+    public List<BookDTO> search(String keyword) {
+        return bookRepository.search(keyword).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public BookDTO createBook(BookDTO dto) {
+        Book book = toEntity(dto);
+        return toDTO(bookRepository.save(book));
+    }
+
+    public BookDTO updateBook(Long id, BookDTO dto) {
+        Book existing = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+
+        existing.setTitle(dto.getTitle());
+        existing.setAuthor(dto.getAuthor());
+        existing.setGenre(dto.getGenre());
+        existing.setPrice(dto.getPrice());
+        existing.setStockQuantity(dto.getStockQuantity());
+        existing.setIsbn(dto.getIsbn());
+        existing.setDescription(dto.getDescription());
+        existing.setCoverImageUrl(dto.getCoverImageUrl());
+
+        return toDTO(bookRepository.save(existing));
+    }
+
+    public void deleteBook(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Book not found with id: " + id);
+        }
+        bookRepository.deleteById(id);
+    }
+
+    private BookDTO toDTO(Book book) {
+        return BookDTO.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .genre(book.getGenre())
+                .price(book.getPrice())
+                .stockQuantity(book.getStockQuantity())
+                .isbn(book.getIsbn())
+                .description(book.getDescription())
+                .coverImageUrl(book.getCoverImageUrl())
+                .build();
+    }
+
+    private Book toEntity(BookDTO dto) {
+        return Book.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .author(dto.getAuthor())
+                .genre(dto.getGenre())
+                .price(dto.getPrice())
+                .stockQuantity(dto.getStockQuantity())
+                .isbn(dto.getIsbn())
+                .description(dto.getDescription())
+                .coverImageUrl(dto.getCoverImageUrl())
+                .build();
     }
 }
