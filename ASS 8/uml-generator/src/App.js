@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import DiagramCanvas from './components/DiagramCanvas';
 import CodeGenerator from './components/CodeGenerator';
 import CreatleyIntegration from './components/CreatleyIntegration';
+import Dashboard from './components/ui/dashboard';
 
 function App() {
   const [classes, setClasses] = useState([]);
@@ -11,6 +12,7 @@ function App() {
   const [generatedCode, setGeneratedCode] = useState('');
   const [showCode, setShowCode] = useState(false);
   const [creatlelyConnected, setCreatlelyConnected] = useState(false);
+  const [activeTab, setActiveTab] = useState('canvas');
 
   const addClass = (newClass) => {
     setClasses([...classes, newClass]);
@@ -71,14 +73,29 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App flex flex-col h-screen">
       <Navbar 
         classCount={classes.length}
         onGenerateCode={generateJavaCode}
         onShowCode={() => setShowCode(!showCode)}
       />
+
+      <div className="flex justify-center border-b border-gray-700 bg-[#2d2d2d] pt-2">
+        <button 
+            className={`px-6 py-2 font-medium text-sm rounded-t-lg transition-colors ${activeTab === 'canvas' ? 'bg-[#1e1e1e] text-white border-b-2 border-blue-500' : 'text-gray-400 hover:text-gray-200 hover:bg-[#3d3d3d]'}`}
+            onClick={() => setActiveTab('canvas')}
+        >
+            UML Canvas
+        </button>
+        <button 
+            className={`px-6 py-2 font-medium text-sm rounded-t-lg transition-colors ${activeTab === 'dashboard' ? 'bg-background text-foreground border-b-2 border-blue-500' : 'text-gray-400 hover:text-gray-200 hover:bg-[#3d3d3d]'}`}
+            onClick={() => setActiveTab('dashboard')}
+        >
+            Dashboard
+        </button>
+      </div>
       
-      <div className="container">
+      <div className="container flex-1 overflow-hidden" style={{ display: activeTab === 'canvas' ? 'flex' : 'none' }}>
         <div className="main-content">
           <div className="canvas-section">
             <DiagramCanvas 
@@ -130,6 +147,12 @@ function App() {
           </div>
         )}
       </div>
+
+      {activeTab === 'dashboard' && (
+          <div className="w-full flex-1 overflow-y-auto bg-background">
+            <Dashboard classes={classes} generatedCode={generatedCode} />
+          </div>
+      )}
     </div>
   );
 }
