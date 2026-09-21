@@ -1,0 +1,361 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  gap: 0;
+  padding: 0;
+}
+
+.main-content {
+  display: flex;
+  gap: 0;
+  flex: 1;
+}
+
+.canvas-section {
+  flex: 1;
+  background: #2a2a2a;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-section h2 {
+  display: none;
+}
+
+.control-section {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #1e1e1e;
+  border-left: 1px solid #404040;
+}
+
+.code-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.class-list {
+  background: #242424;
+  border-radius: 0;
+  padding: 15px;
+  box-shadow: none;
+  border-bottom: 1px solid #404040;
+}
+
+.class-list h3 {
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.class-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.class-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: #2a2a2a;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #ccc;
+  font-size: 13px;
+}
+
+.class-item:hover {
+  background: #333;
+  border-color: #2196F3;
+  color: #fff;
+}
+
+.class-item.selected {
+  background: #2196F3;
+  border-color: #2196F3;
+  color: white;
+  font-weight: bold;
+}
+
+.delete-btn {
+  background: #ff5252;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #ff1744;
+}
+
+/* Canvas Styles - LIKE CREATELY */
+.diagram-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+}
+
+.diagram-canvas {
+  flex: 1;
+  background: linear-gradient(135deg, #2a2a2a 25%, transparent 25%, transparent 75%, #2a2a2a 75%, #2a2a2a),
+              linear-gradient(135deg, #2a2a2a 25%, transparent 25%, transparent 75%, #2a2a2a 75%, #2a2a2a);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  background-color: #1f1f1f;
+  position: relative;
+  overflow: auto;
+  cursor: crosshair;
+  user-select: none;
+}
+
+.diagram-canvas:hover {
+  background-color: #242424;
+}
+
+.uml-class-box {
+  position: absolute;
+  background: white;
+  border: 2px solid #333;
+  border-radius: 4px;
+  min-width: 150px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.uml-class-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.uml-class-box.selected {
+  border: 2px solid #2196F3;
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.6);
+}
+
+.uml-class-box.dragging {
+  opacity: 0.8;
+  cursor: grabbing;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.class-name {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 2px solid #1565C0;
+  font-size: 14px;
+}
+
+.divider {
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.class-attributes {
+  padding: 8px 12px;
+  font-size: 11px;
+  min-height: 30px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.attr-item {
+  color: #333;
+  margin: 2px 0;
+  font-family: 'Courier New', monospace;
+}
+
+.class-methods {
+  padding: 8px 12px;
+  font-size: 11px;
+  min-height: 30px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.method-item {
+  color: #555;
+  margin: 2px 0;
+  font-family: 'Courier New', monospace;
+}
+
+.class-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+  border-top: 1px solid #e0e0e0;
+  background: #f9f9f9;
+}
+
+.edit-btn, .delete-btn {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background: #e3f2fd;
+  border-color: #2196F3;
+  color: #2196F3;
+}
+
+.delete-btn:hover {
+  background: #ffebee;
+  border-color: #ff5252;
+}
+
+.canvas-hint {
+  padding: 8px 12px;
+  background: #1a1a1a;
+  color: #888;
+  font-size: 12px;
+  border-top: 1px solid #404040;
+  text-align: center;
+}
+
+/* Edit Modal */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.edit-modal {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 450px;
+}
+
+.edit-modal h3 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+}
+
+.edit-modal input,
+.edit-modal textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+}
+
+.edit-modal input:focus,
+.edit-modal textarea:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-save {
+  background: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #f0f0f0;
+  color: #333;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .control-section {
+    width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .control-section {
+    width: 100%;
+    height: 250px;
+    border-left: none;
+    border-top: 1px solid #404040;
+  }
+
+  .diagram-canvas {
+    min-height: 300px;
+  }
+}
