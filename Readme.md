@@ -12,6 +12,8 @@ A comprehensive collection of 6 web technology assignments covering full-stack w
 | 4 | Student Result Calculator | React + CSS3 | Intermediate | Grade calculation and result display system |
 | 5 | Student Management System | Spring Boot + PostgreSQL | Advanced | RESTful backend API with database integration |
 | 6 | Online Book Store | Node.js + Express + PostgreSQL | Advanced | Full-stack application with authentication & real-time |
+| 7 | Online Book Store v2 | React + Spring Boot + PostgreSQL | Advanced | Full-stack with modern architecture and JWT auth |
+| 8 | UML Class Diagram Generator | React + Creately API | Advanced | Interactive diagram design with Java code generation |
 
 ---
 
@@ -33,6 +35,8 @@ Each assignment is self-contained in its folder with complete source code and do
 - [ASS 4: React Result Calculator](./ASS%204)
 - [ASS 5: Spring Boot Backend](./ASS%205)
 - [ASS 6: Online Book Store](./ASS%206)
+- [ASS 7: Online Book Store v2](./ASS%207)
+- [ASS 8: UML Diagram Generator](./ASS%208)
 
 ---
 
@@ -46,6 +50,8 @@ web-technology-assignments/
 ├── ASS 4/                # React Student Calculator
 ├── ASS 5/                # Spring Boot Backend
 ├── ASS 6/                # Node.js Book Store
+├── ASS 7/                # React + Spring Boot Book Store
+├── ASS 8/                # UML Diagram Generator
 └── README.md
 ```
 
@@ -72,5 +78,5 @@ Each assignment includes:
 
 ---
 
-**Status**: 🟢 Ready for Production  
+**Status**: 🟢 Ready for Production (ASS 1-7 Complete, ASS 8 In Progress)  
 **Last Updated**: August 2026
