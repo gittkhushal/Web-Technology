@@ -1,0 +1,145 @@
+.match-list {
+  width: 100%;
+}
+
+.match-list h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  color: #999;
+}
+
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.match-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.match-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-color: #1976d2;
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.live {
+  background: #ff4444;
+  color: white;
+  animation: pulse 1s infinite;
+}
+
+.status-badge.scheduled {
+  background: #ffc107;
+  color: #333;
+}
+
+.status-badge.completed {
+  background: #4caf50;
+  color: white;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.match-format {
+  font-size: 0.875rem;
+  color: #666;
+  background: #f5f5f5;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+}
+
+.match-teams {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.team {
+  flex: 1;
+}
+
+.team h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.vs {
+  margin: 0 1rem;
+  color: #999;
+  font-weight: 600;
+}
+
+.match-venue {
+  margin: 1rem 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.match-venue p {
+  margin: 0;
+}
+
+.match-date {
+  margin: 1rem 0 1.5rem;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.match-date p {
+  margin: 0;
+}
+
+.view-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.view-button:hover {
+  background: #1565c0;
+}
