@@ -33,3 +33,6 @@ yarn-error.log*
 # Misc
 .cache/
 *.tmp
+
+# Duplicate folders
+/cricket-score-manager/
