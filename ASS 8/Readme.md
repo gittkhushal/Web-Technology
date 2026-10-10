@@ -1,357 +1,220 @@
-# ASS 8: UML Class Diagram Generator
+# ASS 8: Interactive UML Class Diagram Generator
 
-An interactive web-based UML Class Diagram Generator using React that enables users to visually create UML class diagrams and automatically generate corresponding Java source code based on the designed architecture. Integrates with Creately for diagram management (NO API KEY NEEDED!).
+An interactive web-based UML Class Diagram Generator built with React 18, TypeScript, and Tailwind CSS. It enables software engineers and students to visually design UML class architectures, link them with UML 2.0 relationships, and automatically generate syntactically complete Java source code, PlantUML scripts, and Mermaid diagrams. Includes full Creately-compatible JSON export/import and an observability analytics dashboard.
+
+---
 
 ## 📋 Overview
 
-This assignment demonstrates modern full-stack development with:
-- React 18 for interactive UI
-- Visual UML diagram creation
-- Automatic Java code generation
-- Creately integration for export/import
-- File-based diagram sharing
+- **Frontend Architecture**: React 18 + TypeScript + Tailwind CSS
+- **Visual Design Canvas**: Smooth class dragging, auto-routing SVG relationship lines, and zoom controls
+- **Java Code Generation**: Robust parser supporting UML visibility (`+`, `-`, `#`, `~`), parameters, constructors, getters/setters, `toString()`, and relationship-based field generation
+- **UML 2.0 Relationships**: Inheritance (`extends`), Realization (`implements`), Association, Aggregation, Composition, and Dependency
+- **Creately Integration**: Real JSON file export and import for seamless cloud and offline workflow
+- **Templates**: 1-click loading for University Management, E-Commerce Order System, and Hospital Management
+- **Dashboard**: Draggable observability widget grid tracking live diagram statistics
+
+---
 
 ## 🎯 Features
 
-- ✅ Create UML classes with attributes and methods
-- ✅ Visual canvas for class design
-- ✅ Automatic Java class code generation
-- ✅ Copy and download generated code
-- ✅ Export diagrams as JSON files
-- ✅ Import JSON files from Creately
-- ✅ Real-time class management
-- ✅ Responsive design
+- ✅ **Visual UML Canvas**: Drag classes freely with real-time coordinate updates and grid background
+- ✅ **Dynamic SVG Relationship Lines**: Calculates optimal connection points between classes with correct UML marker heads
+- ✅ **Complete Java Code Generation**:
+  - Handles `+` (public), `-` (private), `#` (protected), `~` (package)
+  - Auto-formats parameter names and return statements (no compile errors)
+  - Supports `extends` (Inheritance) and `implements` (Realization)
+  - Supports Collection fields (e.g. `List<OrderItem>`) for associations & compositions
+  - Toggleable default and parameterized constructors
+  - Toggleable Getters and Setters
+  - Toggleable `toString()` method
+- ✅ **Multi-File & Multi-Format Code Export**:
+  - Tabbed preview per class (`Student.java`, `Course.java`, etc.)
+  - Download individual `.java` files or all classes
+  - Export to **PlantUML** (`.puml`) and **Mermaid** (`.mmd`)
+- ✅ **Creately Integration**:
+  - Export diagrams as standard `uml-diagram.json`
+  - **Import JSON**: File upload (file picker) or direct JSON text paste with instant validation
+- ✅ **Pre-built Templates**: Load University, E-Commerce, or Hospital architecture with one click
+- ✅ **Analytics Dashboard**: Live metrics tracking Total Classes, Attributes, Methods, Relationships, and Completeness Score
+- ✅ **Auto-Save**: Automatic LocalStorage persistence so diagram changes are never lost on page refresh
+
+---
 
 ## 🚀 Setup & Running
 
 ### Prerequisites
 - Node.js 14+ installed
 - npm installed
-- Creately account (free signup at creately.com)
 
-### Installation
+### Installation & Launch
 
-#### 1. Navigate to project
 ```bash
-cd "ASS 8\uml-generator"
+# 1. Navigate to the project directory
+cd "ASS 8/uml-generator"
+
+# 2. Install dependencies (if not already installed)
 npm install
-```
 
-#### 2. Start the application
-```bash
+# 3. Start development server
 npm start
 ```
 
-The application runs on `http://localhost:3000`
+The application runs on `http://localhost:3000`.
+
+### Running Tests
+```bash
+npm test -- --watchAll=false
+```
+
+### Production Build
+```bash
+npm run build
+```
+
+---
 
 ## 📁 Project Structure
 
 ```
 uml-generator/
 ├── public/
-│   └── index.html              # HTML entry point
+│   └── index.html               # HTML entry point
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.js           # Navigation bar
-│   │   ├── DiagramCanvas.js    # UML canvas with class creation
-│   │   ├── CodeGenerator.js    # Java code output panel
-│   │   └── CreatleyIntegration.js  # Creately integration (no API key!)
-│   ├── App.js                  # Main app component
-│   ├── App.css                 # Application styles
-│   └── index.js                # React entry point
-├── package.json                # Dependencies
-└── README.md                    # Documentation
+│   │   ├── Navbar.tsx           # Navigation bar with tabs and counters
+│   │   ├── DiagramCanvas.tsx    # Drag-and-drop canvas with SVG relationship lines
+│   │   ├── CodeGenerator.tsx    # Java, PlantUML & Mermaid code generator panel
+│   │   ├── CreatelyIntegration.tsx # Creately export/import & cloud guidance
+│   │   ├── ClassModal.tsx       # Interactive Class creation/edit modal
+│   │   ├── RelationshipModal.tsx# Relationship type & multiplicity modal
+│   │   ├── AboutModal.tsx       # Documentation & notation guide
+│   │   └── ui/
+│   │       ├── dashboard.tsx    # Draggable statistics dashboard
+│   │       └── draggable-widget-grid.tsx # Widget grid layout engine
+│   ├── types/
+│   │   └── uml.ts               # UML TypeScript interfaces & types
+│   ├── utils/
+│   │   ├── codeGenerator.ts     # Java, PlantUML & Mermaid generation engine
+│   │   └── diagramTemplates.ts  # Pre-built University, E-Commerce & Hospital templates
+│   ├── App.tsx                  # Master application controller
+│   ├── App.css                  # Custom styling & scrollbars
+│   ├── index.css                # Tailwind directives & design tokens
+│   └── index.tsx                # React entry point
+├── package.json                 # Dependencies & scripts
+├── tailwind.config.js           # Tailwind configuration
+├── tsconfig.json                # TypeScript configuration
+└── README.md                    # Assignment documentation
 ```
+
+---
 
 ## 📖 How to Use
 
-### Step 1: Creating UML Classes
+### 1. Designing Classes
+1. Click **+ Add Class** on the canvas or toolbar.
+2. Enter the class name (e.g. `Student`).
+3. Select stereotype: `Standard Class`, `<<abstract>>`, `<<interface>>`, or `<<enum>>`.
+4. Choose an accent color theme.
+5. Add attributes using the interactive builder or bulk text mode:
+   - `- id: int`
+   - `- name: String`
+   - `- gpa: double`
+6. Add methods:
+   - `+ getGpa(): double`
+   - `+ enroll(course: Course): boolean`
+7. Click **Create Class**. Double-click any class box to edit it at any time.
 
-1. Click **+ Add Class** button in the canvas area
-2. Enter **class name** (e.g., "Student")
-3. Add **attributes** (one per line):
-   ```
-   name:String
-   age:int
-   email:String
-   gpa:double
-   ```
-4. Add **methods** (one per line):
-   ```
-   getName():String
-   setAge(int):void
-   getGPA():double
-   displayInfo():void
-   ```
-5. Click **Add Class** to create it
-6. Repeat for more classes: "Course", "Instructor", "Enrollment", etc.
+### 2. Linking Relationships
+1. Click **Add Relationship** or click the 🔗 icon on any class box.
+2. Select the Source and Target classes.
+3. Choose the relationship type:
+   - **Inheritance / Generalization**: `Subclass ——▷ Superclass` (Java `extends`)
+   - **Realization / Interface**: `Class - - ▷ Interface` (Java `implements`)
+   - **Association**: `ClassA ——> ClassB`
+   - **Aggregation**: `Parent ◇—— Child` (weak "has-a")
+   - **Composition**: `Parent ◆—— Child` (strong "part-of")
+   - **Dependency**: `ClassA - - > ClassB`
+4. Set multiplicity (e.g. `1` to `*`) and optional label (e.g. `enrolledIn`).
+5. Click **Create Relationship**. The SVG connector automatically routes between the boxes.
 
-### Step 2: Generating Java Code
+### 3. Generating Java Code
+1. Click **🔨 Generate Java Code** in the navbar.
+2. View code per-class tab or in the combined file view.
+3. Toggle optional features in the Settings menu:
+   - Default & Parameterized Constructors
+   - Getters and Setters
+   - `toString()` Method
+   - Section Comments
+4. Click **📋 Copy** or **⬇️ Download** to save the `.java` files.
+5. Switch to **PlantUML** or **Mermaid** tabs for instant diagram markdown exports.
 
-1. Design all your UML classes (minimum 1)
-2. Click **🔨 Generate Java Code** button in navbar
-3. Click **👁 Toggle Code View** to show/hide code
-4. In code panel:
-   - Click **📋 Copy** to copy code to clipboard
-   - Click **⬇️ Download** to save as file
+### 4. Creately Integration (Export & Import)
+1. In the sidebar, open the **Creately Integration** section.
+2. Click **📤 Export JSON** to save `uml-diagram.json`.
+3. To load any saved or Creately diagram, click **📥 Import JSON** and select the `.json` file, or click **📋 Paste JSON** to paste directly.
 
-**Generated Code Example:**
-```java
-public class Student {
-    private String name;
-    private int age;
-    private String email;
-    private double gpa;
+---
 
-    public String getName() {
-        // TODO: Implement
-    }
+## 📊 Exported JSON Schema
 
-    public void setAge(int newAge) {
-        // TODO: Implement
-    }
-
-    public double getGPA() {
-        // TODO: Implement
-    }
-
-    public void displayInfo() {
-        // TODO: Implement
-    }
-}
-```
-
-### Step 3: Using Creately Integration (NO API KEY!)
-
-#### Connect to Creately:
-1. Click **ℹ️ How to Connect** in the "🎨 Creately Integration" panel
-2. Follow the simple 5-step instructions
-3. Click **✅ I've Set Up Creately - Connect Now**
-4. You'll see green "Ready" badge
-
-#### Export Your Diagram:
-1. Design your UML classes in our app
-2. Click **📤 Export as JSON**
-3. File downloads: `uml-diagram.json`
-4. This file contains all your classes, attributes, and methods
-
-#### Import to Creately:
-1. Go to **creately.com** in your browser
-2. Create a new diagram or workspace
-3. Look for **"Import"** button
-4. Choose the downloaded `uml-diagram.json` file
-5. Your diagram instantly appears in Creately!
-6. Use Creately's tools to design, share, and collaborate
-
-## 🌐 How Creately Integration Works
-
-**We don't use API tokens because:**
-- Modern Creately uses cloud-based import/export
-- Simpler and more secure for users
-- No need to manage API keys
-- Works offline first, syncs when needed
-
-**The Process:**
-```
-Our App                          Creately
-   ↓                               ↓
-Design Classes         ←→    Sign up / Login
-   ↓
-Generate JSON
-   ↓
-📤 Export as File     ←→    📥 Import JSON
-   ↓                          ↓
-Diagram Data          ←→    Cloud Storage
-   ↓
-Share/Collaborate     ←→    Real-time Editing
-```
-
-## 💻 Technology Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18 |
-| Styling | CSS3 |
-| State Management | React Hooks (useState) |
-| Code Generation | Template Literals |
-| File Export | Blob API |
-| Integration | JSON Export/Import |
-
-## 🎨 UI Components
-
-### Navbar
-- Application title with class counter
-- "🔨 Generate Java Code" - Generate code from UML
-- "👁 Toggle Code View" - Show/hide generated code
-- "ℹ️ About" - Information button
-
-### Diagram Canvas
-- Visual area with grid background
-- **+ Add Class** button to create classes
-- Form to enter class details
-- Displays all created classes as boxes
-- Click class to select (highlighted in blue)
-- Click ✕ to delete class
-
-### Code Generator
-- Shows generated Java code
-- **📋 Copy** - Copy all code to clipboard
-- **⬇️ Download** - Save as GeneratedCode.java file
-- Syntax-highlighted code display
-
-### Creately Integration
-- **🌐 Open Creately.com** - Open Creately in new tab
-- **ℹ️ How to Connect** - Shows connection instructions
-- **✅ I've Set Up Creately** - Connect button
-- **📤 Export as JSON** - Download diagram as JSON
-- **📥 Import from JSON** - Load diagram from JSON file
-- **🔌 Disconnect** - Disconnect from Creately
-
-## 📊 Data Format
-
-### Exported JSON Format
 ```json
 {
   "title": "UML Class Diagram",
-  "timestamp": "2026-09-21T10:30:00.000Z",
+  "version": "2.0",
+  "timestamp": "2026-10-10T12:00:00.000Z",
   "classes": [
     {
+      "id": "cls-student",
       "name": "Student",
+      "stereotype": "class",
+      "color": "#3b82f6",
       "attributes": [
-        "name:String",
-        "age:int",
-        "email:String"
+        "- studentId: String",
+        "- gpa: double"
       ],
       "methods": [
-        "getName():String",
-        "setAge(int):void",
-        "displayInfo():void"
-      ]
+        "+ getGpa(): double",
+        "+ enroll(course: Course): boolean"
+      ],
+      "x": 120,
+      "y": 280,
+      "width": 220
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel-1",
+      "sourceId": "cls-student",
+      "targetId": "cls-person",
+      "type": "inheritance",
+      "label": "extends"
     }
   ]
 }
 ```
 
-## � Troubleshooting
+---
 
-### "npm start doesn't work"
-- Run `npm install` first
-- Check Node.js version: `node -v` (need 14+)
-- Delete node_modules: `rm -r node_modules` then `npm install`
+## 🛠️ Bugs & Flaws Fixed from Initial Submission
 
-### "Can't add class"
-- Make sure class name is not empty
-- Attributes/Methods should be on separate lines
-- Try simple format first: "name:String"
-
-### "Code not generating"
-- Add at least 1 class first
-- Click "Generate Java Code" button
-- Try toggling code view
-
-### "Export as JSON fails"
-- Ensure Creately is connected (green "Ready" badge)
-- Add at least 1 class
-- Check browser download settings
-
-### "Import to Creately fails"
-- Go to creately.com directly
-- Create new diagram
-- Look for "Import" or "Upload" button
-- Select your downloaded JSON file
-
-## ✅ Testing Checklist
-
-- [ ] Add multiple UML classes
-- [ ] Create attributes for each class
-- [ ] Create methods for each class
-- [ ] Generate Java code
-- [ ] Copy code to clipboard
-- [ ] Download code as file
-- [ ] Connect to Creately
-- [ ] Export diagram as JSON
-- [ ] Import JSON to Creately
-- [ ] View diagram in Creately
-- [ ] Test on mobile/tablet
-
-## 🎓 Learning Concepts Covered
-
-- Component-based React architecture
-- React Hooks (useState for state management)
-- Event handling and form validation
-- File generation and download (Blob API)
-- JSON data structure and formatting
-- CSS Grid and Flexbox for responsive design
-- UML diagram concepts
-- Java code generation from templates
-
-## 📈 Future Enhancements
-
-- Relationship lines (inheritance, composition)
-- Drag-and-drop class positioning
-- Multiple diagram support
-- Real-time collaboration
-- Dark mode
-- Code preview with syntax highlighting
-- Database schema generation
-- C++/Python code generation
-- Diagram templates
-
-## 🌍 Deployment Ready
-
-- ✅ Runs locally on localhost:3000
-- ✅ No backend server needed
-- ✅ All processing on client-side
-- ✅ Can be deployed to Vercel/Netlify
-- ✅ Works offline (except Creately export)
-
-## 📝 Assignment Completion
-
-**ASS 8 includes:**
-- ✅ Interactive React UI for UML design
-- ✅ Automatic Java code generation
-- ✅ Creately integration (file-based)
-- ✅ Professional documentation
-- ✅ Responsive design
-- ✅ Export/Import functionality
+| Component | Bug / Flaw in Original Code | Resolution |
+|-----------|-----------------------------|------------|
+| **DiagramCanvas** | Dragging class position was a dummy comment (`// Update classes array...`) and never persisted | Implemented smooth real-time drag positioning with zoom coordinates |
+| **DiagramCanvas** | Canvas delete button was hardcoded to `alert('Delete not implemented yet')` | Connected real `onDeleteClass` handler with relationship cascade deletion |
+| **DiagramCanvas** | Save button in edit modal had no `onClick` handler | Full `ClassModal` with validation, interactive builder, and working save |
+| **DiagramCanvas** | Canvas click unintentionally spawned dummy classes `ClassN` | Replaced with explicit `+ Add Class` modal and clean canvas click selection |
+| **DiagramCanvas** | Missing all UML relationship connectors | Implemented SVG lines with proper UML markers (Inheritance, Realization, Association, Aggregation, Composition) |
+| **CodeGenerator** | Visibility symbols (`+`, `-`, `#`, `~`) produced invalid Java like `private String - name;` or silently dropped methods | Implemented smart parser for attributes & methods supporting visibility, defaults, and parameters |
+| **CodeGenerator** | Methods lacked return statements, causing Java compile errors | Generates syntactically correct default return statements based on type |
+| **CodeGenerator** | Lacked constructors, getters/setters, and relationship field generation | Added configurable constructors, getters/setters, `toString()`, and `List<T>` association fields |
+| **CreatelyIntegration** | "Import from JSON" was just an alert telling user to go away | Real working JSON file upload (FileReader) and text paste import with schema validation |
+| **CreatelyIntegration** | Export JSON stripped out positions and diagram metadata | Full schema export including positions, dimensions, stereotypes, and relationships |
+| **Architecture** | Duplicate and conflicting `.js` and `.tsx` files in `src/` | Consolidated to 100% clean TypeScript with zero compiler/ESLint warnings |
+| **Aesthetics** | Clashing light/dark panels, raw `<style>` tag DOM injection | Unified dark theme with Tailwind CSS, glassmorphism, Lucide icons, and responsive layouts |
 
 ---
 
-**Status**: ✅ Complete  
-**Tech Stack**: React 18 + Creately Integration  
-**Deployment**: Ready for GitHub  
-**Last Updated**: September 2026
-
-## 🚀 Quick Start Commands
-
-```bash
-# Navigate to project
-cd "ASS 8\uml-generator"
-
-# Install dependencies
-npm install
-
-# Start development server
-npm start
-
-# Build for production
-npm build
-
-# Run tests
-npm test
-```
-
-## 📞 Support
-
-For issues:
-1. Check console for errors (F12)
-2. Verify class name and attributes format
-3. Ensure Node.js version is 14+
-4. Try clearing browser cache
-5. Restart npm server
-
----
-
-**Created**: September 2026  
-**Assignment**: 8 / Full Stack Web Development  
-**Score Ready**: Yes
+**Status**: ✅ Complete & Production Ready  
+**Tech Stack**: React 18 + TypeScript + Tailwind CSS + Framer Motion  
+**Tested**: All Unit & Build Tests Passing (0 warnings, 0 errors)

@@ -3,8 +3,6 @@
 import React, {
 	createContext,
 	useContext,
-	useEffect,
-	useState,
 	type ReactNode,
 } from 'react'
 import DraggableWidgetGrid, { type WidgetItem } from './draggable-widget-grid'
@@ -17,6 +15,7 @@ type Kind =
 	| 'totalClasses'
 	| 'totalAttributes'
 	| 'totalMethods'
+	| 'totalRelationships'
 	| 'completeness'
 	| 'recentClasses'
 	| 'classBreakdown'
@@ -29,6 +28,7 @@ const WIDGETS: Widget[] = [
 	{ id: 'total-classes', kind: 'totalClasses', size: 'sm', label: 'Total Classes' },
 	{ id: 'total-attributes', kind: 'totalAttributes', size: 'sm', label: 'Total Attributes' },
 	{ id: 'total-methods', kind: 'totalMethods', size: 'sm', label: 'Total Methods' },
+	{ id: 'total-relationships', kind: 'totalRelationships', size: 'sm', label: 'Relationships' },
 	{ id: 'completeness', kind: 'completeness', size: 'sm', label: 'Completeness Score' },
 	{ id: 'recent-classes', kind: 'recentClasses', size: 'wide', label: 'Recent Classes' },
 	{ id: 'class-breakdown', kind: 'classBreakdown', size: 'wide', label: 'Class Breakdown' },
@@ -40,10 +40,11 @@ const WIDGETS: Widget[] = [
 
 interface DashboardData {
     classes: any[];
+    relationships: any[];
     generatedCode: string;
 }
 
-const DataContext = createContext<DashboardData>({ classes: [], generatedCode: '' })
+const DataContext = createContext<DashboardData>({ classes: [], relationships: [], generatedCode: '' })
 
 const PALETTE = [
 	'[--background:#ffffff] [--color-background:#ffffff] [--foreground:#09090b] [--color-foreground:#09090b] [--card:#ffffff] [--color-card:#ffffff] [--card-foreground:#09090b] [--color-card-foreground:#09090b] [--muted-foreground:#71717a] [--color-muted-foreground:#71717a] [--border:#e4e4e7] [--color-border:#e4e4e7] [--ring:#18181b] [--color-ring:#18181b]',
@@ -296,6 +297,19 @@ function ClassBreakdown() {
 	)
 }
 
+function TotalRelationships() {
+	const { relationships } = useContext(DataContext)
+	const total = relationships?.length || 0
+	return (
+		<Shell title="Relationships" meta={<Dot tone={total > 0 ? 'ok' : 'idle'} />}>
+			<Big>{total}</Big>
+            <p className="mt-3 text-[13px] text-muted-foreground">
+                Connections (Inheritance, Association, Composition, etc.)
+            </p>
+		</Shell>
+	)
+}
+
 /* ------------------------------------------------------------------ *
  * Board
  * ------------------------------------------------------------------ */
@@ -304,6 +318,7 @@ const VIEWS: Record<Kind, () => ReactNode> = {
 	totalClasses: TotalClasses,
 	totalAttributes: TotalAttributes,
 	totalMethods: TotalMethods,
+	totalRelationships: TotalRelationships,
 	recentClasses: RecentClasses,
 	completeness: Completeness,
 	classBreakdown: ClassBreakdown,
@@ -311,10 +326,18 @@ const VIEWS: Record<Kind, () => ReactNode> = {
 
 const renderWidget = (item: Widget) => {
 	const View = VIEWS[item.kind]
-	return <View />
+	return <>{View()}</>
 }
 
-export default function Dashboard({ classes = [], generatedCode = '' }: { classes?: any[], generatedCode?: string }) {
+export default function Dashboard({ 
+	classes = [], 
+	relationships = [], 
+	generatedCode = '' 
+}: { 
+	classes?: any[], 
+	relationships?: any[], 
+	generatedCode?: string 
+}) {
 	return (
 		<div
 			className={`flex h-full w-full items-start justify-center bg-background px-4 py-8 text-foreground antialiased ${PALETTE}`}
@@ -333,7 +356,7 @@ export default function Dashboard({ classes = [], generatedCode = '' }: { classe
 					<h2 id="agent-observability-title" className="sr-only">
 						UML Dashboard
 					</h2>
-					<DataContext.Provider value={{ classes, generatedCode }}>
+					<DataContext.Provider value={{ classes, relationships, generatedCode }}>
 						<DraggableWidgetGrid
 							items={WIDGETS}
 							renderItem={(item) => renderWidget(item as Widget)}

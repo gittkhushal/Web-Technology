@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+# UML Diagram Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> **Note**: The active and complete UML Class Diagram Generator application is located in `../uml-generator/`.  
+> Please run:
+> ```bash
+> cd "../uml-generator"
+> npm install
+> npm start
+> ```
+
+## Getting Started with Create React App
 
 ## Available Scripts
 

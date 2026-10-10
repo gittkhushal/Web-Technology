@@ -253,7 +253,8 @@ function pack(items: WidgetItem[], columns: number): Placement[] {
 			cells[i] = true
 		}
 
-		out.push(...band.map((p) => ({ ...p, row: p.row + row })))
+		const currentRow = row;
+		out.push(...band.map((p) => ({ ...p, row: p.row + currentRow })))
 		row += height
 		queue = rest
 	}
